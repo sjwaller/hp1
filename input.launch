@@ -1,0 +1,23 @@
+<launch>
+     
+    <!--
+        Set up SixAxis Joystick 
+
+        $sudo bash
+        
+        #rosrun ps3joy ps3joy.py &
+        
+        > Press start button to activate
+        
+        #jstest /dev/input/js1
+    -->
+    
+    <!-- Axes -->
+    <param name="scale_linear" value="255" type="int"/>
+    <param name="scale_angular" value="180" type="int"/>
+    <param name="deadzone_" value="10" type="int"/>
+    
+    <!-- input controller -->
+    <node name="Input" pkg="hp1" type="Input" />
+   
+</launch>

@@ -1,0 +1,27 @@
+<launch>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" > 
+     <arg name="port" value="8081"/>
+  </include>
+
+  <!-- Set this to your camera's name -->
+  <arg name="cam_name" value="hp1_cam" />
+
+  <!-- Start the GSCAM node -->
+  <node pkg="gscam" type="gscam" name="$(arg cam_name)">
+    <remap from="camera/image_raw" to="$(arg cam_name)/image_raw" />
+  </node>
+
+    <!-- Launch mjpeg server, used for sending image streams -->
+    <node 
+        name="mjpeg_server" 
+        pkg="mjpeg_server" 
+        type="mjpeg_server"  
+        output="screen">
+            <param
+                name="port"
+                type="int"
+                value="8082" />
+    </node>
+
+</launch>

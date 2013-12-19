@@ -1,0 +1,10 @@
+<launch>
+    <!-- behavioural state machine -->
+    <node name="Hp1" pkg="hp1" type="Hp1" />
+    
+    <!-- input controller -->
+    <node name="Input" pkg="hp1" type="Input" />
+
+    <!-- pan/tilt and object tracking -->
+    <node name="Head" pkg="hp1" type="Head" />
+</launch>

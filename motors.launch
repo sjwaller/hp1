@@ -1,0 +1,44 @@
+<launch>
+ 
+    <rosparam file="$(find hp1)/robots/hp1.yml" command="load"/>
+	
+    <node name="dynamixel_manager" pkg="dynamixel_controllers" type="controller_manager.py" required="true" output="screen">
+        <rosparam>
+            namespace: dxl_manager
+            serial_ports:
+                motor_port:
+                    port_name: "/dev/ttyUSB0"
+                    baud_rate: 1000000
+                    min_motor_id: 1
+                    max_motor_id: 20
+                    update_rate: 20
+        </rosparam>
+    </node>
+
+    <node name="motor_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
+          args="--manager=dxl_manager
+                --port=motor_port
+                --type=simple
+		pan_controller
+		tilt_controller
+		lf_coxa_controller
+		rf_coxa_controller
+		lm_coxa_controller
+		rm_coxa_controller
+		lr_coxa_controller
+        rr_coxa_controller
+		lf_femur_controller
+		rf_femur_controller
+		lm_femur_controller
+		rm_femur_controller
+        lr_femur_controller
+		rr_femur_controller
+        lf_tibia_controller
+		rf_tibia_controller
+		lm_tibia_controller
+		rm_tibia_controller
+		lr_tibia_controller
+		rr_tibia_controller"
+          output="screen"/>    	
+</launch>
+

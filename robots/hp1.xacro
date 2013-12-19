@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hp1">
+<!--
+	http://www.ros.org/wiki/urdf/Tutorials
+	http://www.ros.org/wiki/urdf/Tutorials/Create%20your%20own%20urdf%20file
+	 
+	 body: 165mm x 165mm x 40mm
+	 coxa: 55mm x 40mm x 40mm
+	 tibia: 83mm x 40mm x 40mm
+	 femur: 40mm x 40mm x 83mm
+	 
+	12. lf_femur    \         /   11. rf_femur
+	10. lf_tibia     \       /     9. rf_tibia
+	 8. lf_coxa       /     \      7. rf_coxa      
+	                     +  				       
+	 2. lr_coxa       \     /      1. rr_coxa
+	 4. lr_tibia     /       \     3. rr_tibia
+	 6. lr_femur    /         \    5. rr_femur
+	 
+	 TODO:
+	 
+	 - Add  <origin xyz="5 3 0" rpy="0 0 0" />
+	 - Add  <axis xyz="-0.9 0.15 0" />
+	 
+	 units: metres
+-->
+<xacro:property name="pi" value="3.1415926535897931" />
+<xacro:property name="bodylength" value=".165" />
+<xacro:property name="bodywidth" value=".165" />
+
+<link name="body">
+  <visual>
+    <origin xyz="0 0 0" />
+    <geometry>
+      <box size="${bodywidth} ${bodylength} .037" />
+    </geometry>
+    <material name="black">
+      <color rgba="0 0 0 1"/>
+    </material>
+  </visual>
+</link>
+
+<link name="pan_link">
+  <visual>
+	<origin xyz="0 0 0" />
+	<geometry>
+	  <box size=".055 .048 .048" />
+	</geometry>
+	<material name="white">
+	  <color rgba="1 1 1 1"/>
+	</material>
+  </visual>
+</link>
+
+<joint name="pan_joint" type="revolute">
+  <parent link="body"/>
+  <child link="pan_link"/>
+  <origin xyz="0 ${-(bodylength/2)} 0" rpy="0 0 0" />
+  <axis xyz="0 0 1" />
+  <limit effort="500.0" lower="-1.5708" upper="1.5708" velocity="0.5"/>
+</joint>
+
+<link name="tilt_link">
+  <visual>
+	<origin xyz="0 0 0" />
+	<geometry>
+	  <box size=".083 .038 .031" />
+	</geometry>
+	<material name="black"/>
+  </visual>
+</link>
+
+<joint name="tilt_joint" type="revolute">
+  <parent link="pan_link"/>
+  <child link="tilt_link"/>
+  <origin xyz="0 ${-(bodylength/2)} 0" rpy="0 0 0" />
+  <axis xyz="0 0 1" />
+  <limit effort="500.0" lower="-1.5708" upper="1.5708" velocity="0.5"/>
+</joint>
+
+
+<xacro:macro name="leg" params="prefix reflectx reflecty coxa_angle femur_angle tibia_angle">
+
+	<link name="${prefix}_coxa_link">
+	  <visual>
+	    <origin xyz="-.0275 0 0" />
+	    <geometry>
+	      <box size=".055 .048 .048" />
+	    </geometry>
+	    <material name="white">
+	      <color rgba="1 1 1 1"/>
+	    </material>
+	  </visual>
+	</link>
+
+	<joint name="${prefix}_coxa_joint" type="revolute">
+	  <parent link="body"/>
+	  <child link="${prefix}_coxa_link"/>
+	  <origin xyz="${reflectx*(bodywidth/2)} ${reflecty*(bodylength/2)} 0" rpy="0 0 ${coxa_angle}" />
+	  <axis xyz="0 0 1" />
+	  <limit effort="500.0" lower="-1.5708" upper="1.5708" velocity="0.5"/>
+	</joint>
+
+	<link name="${prefix}_femur_link">
+	  <visual>
+	    <origin xyz="-.0415 0 0" />
+	    <geometry>
+	      <box size=".083 .038 .031" />
+	    </geometry>
+	    <material name="black"/>
+	  </visual>
+	</link>
+
+	<joint name="${prefix}_femur_joint" type="revolute">
+	  <parent link="${prefix}_coxa_link"/>
+	  <child link="${prefix}_femur_link"/>
+	  <origin xyz="-.055 0 0" rpy="${femur_angle} 0 0" />
+	  <axis xyz="0 1 0" />
+	  <limit effort="500.0" lower="-1.5708" upper="1.5708" velocity="0.5"/>
+	</joint>
+
+	<link name="${prefix}_tibia_link">
+	  <visual>
+	    <origin xyz="0.0655 0 0" />
+	    <geometry>
+	      <box size=".132 .048 .028" />
+	    </geometry>
+	    <material name="black"/>
+	  </visual>
+	</link>
+
+	<joint name="${prefix}_tibia_joint" type="revolute">
+	  <parent link="${prefix}_femur_link"/>
+	  <child link="${prefix}_tibia_link"/>
+	  <origin xyz="-.083 0 0" rpy="0 ${tibia_angle}  0" />
+	  <axis xyz="0 1 0" />
+	  <limit effort="500.0" lower="-1.5708" upper="1.5708" velocity="0.5"/>
+	</joint>
+
+</xacro:macro>
+
+<xacro:leg prefix="lf" reflectx="-1" 	reflecty="1" 	coxa_angle="-0.7854" femur_angle="-3.141" tibia_angle="-1.571" />
+<xacro:leg prefix="lr" reflectx="-1" 	reflecty="-1" 	coxa_angle="0.7854" femur_angle="-3.141" tibia_angle="-1.571" />
+<xacro:leg prefix="rf" reflectx="1" 	reflecty="1" 	coxa_angle="3.927" femur_angle="0" tibia_angle="1.571" />
+<xacro:leg prefix="rr" reflectx="1" 	reflecty="-1" 	coxa_angle="-3.927" femur_angle="0" tibia_angle="1.571" />
+
+</robot>
+

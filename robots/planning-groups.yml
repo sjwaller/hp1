@@ -1,0 +1,47 @@
+## the definition of each group
+groups:
+
+  - name: body
+    joints:
+    links:
+
+  - name: lr_leg
+    joints:
+      lr_coxa_joint
+      lr_tibia_joint
+      lr_femur_joint
+    links:
+      lr_coxa_link
+      lr_tibia_link
+      lr_femur_link
+
+  - name: rr_leg
+    joints:
+      rr_coxa_joint
+      rr_tibia_joint
+      rr_femur_joint
+    links:
+      rr_coxa_link
+      rr_tibia_link
+      rr_femur_link
+
+  - name: lf_leg
+    joints:
+      lf_coxa_joint
+      lf_tibia_joint
+      lf_femur_joint
+    links:
+      lf_coxa_link
+      lf_tibia_link
+      lf_femur_link
+
+  - name: rf_leg
+    joints:
+      rf_coxa_joint
+      rf_tibia_joint
+      rf_femur_joint
+    links:
+      rf_coxa_link
+      rf_tibia_link
+      rf_femur_link
+
