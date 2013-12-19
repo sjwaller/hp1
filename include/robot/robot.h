@@ -1,10 +1,3 @@
-/* 
- * File:   robot.h
- * Author: viki
- *
- * Created on April 7, 2013, 1:12 PM
- */
-
 #ifndef ROBOT_H
 #define	ROBOT_H
 
