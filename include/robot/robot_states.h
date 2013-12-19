@@ -1,10 +1,3 @@
-/* 
- * File:   robot_states.h
- * Author: viki
- *
- * Created on April 7, 2013, 1:06 PM
- */
-
 #ifndef ROBOT_STATES_H
 #define	ROBOT_STATES_H
 
