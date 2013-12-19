@@ -1,20 +1,14 @@
 //=============================================================================
 //Project Lynxmotion Phoenix
 //Description: Phoenix software
-// This version is converted to run on Arbotix PhantomX
+// This version is converted to run on HP1 robot
 //Software version: V2.0
 //Date: 29-10-2009
 //Programmer: Jeroen Janssen [aka Xan]
 //   Kurt Eckhardt(KurtE) converted to C and Arduino
 //   Kåre Halvorsen aka Zenta - Makes everything work correctly!     
-//
-// This version of the Phoenix code was ported over to the Arduino Environement
-//
-//NEW IN V2.X
-//=============================================================================
-//
-//KNOWN BUGS:
-//    - Lots ;)
+// ============================================================================
+// This version of the Phoenix code was ported over to C++ by sjwaller@gmail.com
 //
 #include <cmath>
 #include <math.h>
