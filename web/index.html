@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+    </head>
+
+    <body onload="init();">
+        <style type="text/css">
+            <!--
+            #video_canvas { border: 1px solid #000; }
+            -->
+        </style>
+
+        <canvas id="video_canvas" width="javascript:getWidth()" height="javascript:getHeight()" style="position: absolute; left: 0; top: 50; z-index: 0;"> </canvas>
+
+        <div id="button_location">
+            <button type="button" onclick="up()">up</button>
+            <button type="button" onclick="down()">down</button>
+            <button type="button" onclick="left()">left</button>
+            <button type="button" onclick="right()">right</button>
+            
+            <script language="javascript">
+                if (video_canvas.height < 480) {
+                    document.write('</br>');
+                }
+            </script>
+            
+                      <button type="button" onclick="lookAround()">look around</button>
+  
+        </div>
+
+        <script type="application/x-javascript">
+            var cam_img = new Image();
+            var ros = null;
+            var cmdPan = null;
+            var cmdTilt = null;
+            var speed = 0.0005;
+            
+            // set variables for adjusting canvas and video resolution settings
+            var width = "800" //default width
+            var height = "600"  //default height
+            
+            javascript:console.log("default width = " + width);
+            javascript:console.log("default height = " + height);
+
+            function init()
+            {
+                cam_img.src = "http://192.168.0.10:8082/stream?topic=/hp1_cam/image_raw";
+
+                //call redraw of video canvas every 100 ms
+                setInterval(draw,100);
+      
+                try {
+                    ros = new ROSLIB.Ros({
+                        url: 'ws://192.168.0.10:8081'
+                    });   
+                } catch (err) {
+                    javascript:console.log('Problem creating proxy connection object!');
+                    return;
+                }
+
+                cmdPan = new ROSLIB.Topic({
+                      ros : ros,
+                      name : '/pan_controller/command',
+                      messageType : 'std_msgs/Float64'
+                });
+                   
+                cmdTilt = new ROSLIB.Topic({
+                      ros : ros,
+                      name : '/tilt_controller/command',
+                      messageType : 'std_msgs/Float64'
+                });
+
+                cmdPan.publish(new ROSLIB.Message({
+                        data : 0
+                }));
+                    
+                 cmdTilt.publish(new ROSLIB.Message({
+                        data : 0
+                }));
+                
+                //get kinect video stream width and height values from rostopic via rosbridge
+                dynamically_set_video_resolution();
+
+                javascript:console.log('created');
+          
+            }
+
+            function draw() 
+            {
+                // draw video on single canvas
+                var ctx = document.getElementById('video_canvas').getContext('2d');
+                //ctx.clearRect(0,0,300,300); // clear canvas...not needed for video feed to work
+                ctx.drawImage(cam_img,0,0,width,height);
+            }
+            
+            function dynamically_set_video_resolution() 
+            {
+                javascript:console.log('console initialized');
+
+                javascript:console.log('creating ROSProxy connection object...');
+
+                var listener = new ROSLIB.Topic({
+                  ros : ros,
+                  name : '/hp1_cam/camera_info',
+                  messageType : 'sensor_msgs/CameraInfo'
+                });
+
+                javascript:console.log('listener created');
+          
+                listener.subscribe(function(msg) {
+         
+                console.log('Received message on ' + listener.name + ': ' + msg);
+               
+                console.log(dump(msg));
+               
+                    width = width;
+                    height = height;
+
+                    javascript:console.log("dynamically adjusted width = " + msg.width);
+                    javascript:console.log("dynamically adjusted height = " + msg.height);
+
+                    document.getElementById("video_canvas").setAttribute("width",width)   
+                    document.getElementById("video_canvas").setAttribute("height",height)
+                    document.getElementById("button_location").setAttribute("style","position: relative; left: 0; top: " + height + ";")
+                   
+                    listener.unsubscribe();
+                });
+            }
+
+
+            function lookAround()
+            {
+                
+                for(cnt = 0; cnt < 10; cnt++)
+                {
+                
+                var step = (2 * Math.PI/20) / 250;  // see note 1
+                var h = 0.1; 
+                var k = 0.1;
+                var r = 1;
+
+                for(var theta=0;  theta < 2*Math.PI;  theta+=step)
+                 { 
+                   var x = h + r* Math.cos(theta);
+                   var y = k - r* Math.sin(theta);    //note 2.
+                                       
+                    cmdPan.publish(new ROSLIB.Message({
+                        data : x
+                    }));
+                    
+                    cmdTilt.publish(new ROSLIB.Message({
+                        data : 0.6 + -(y/3)
+                    }));
+                 }
+                }
+            }
+            
+            var x = 0, y =0;
+
+            function up()
+            {
+                
+                y = y + 0.05;
+                
+                if(y > 1) y = 1;
+                
+                cmdTilt.publish(new ROSLIB.Message({
+                    data : y
+                }));
+            }
+            
+            function down()
+            {
+                y = y - 0.05;
+                
+                if(y < -1) y = -1;
+                
+                cmdTilt.publish(new ROSLIB.Message({
+                    data : y
+                }));
+            }
+
+            function left()
+            {
+                x = x + 0.05;
+                
+                if(x > 1) x = 1;
+              
+                cmdPan.publish(new ROSLIB.Message({
+                    data : x
+                }));
+            }
+            
+            function right()
+            {
+                x = x - 0.05;
+                
+                if(x < -1) x = -1;
+                    
+                cmdPan.publish(new ROSLIB.Message({
+                    data : x
+                }));
+            }
+
+            function dump(arr,level) {
+                var dumped_text = "";
+                if(!level) level = 0;
+
+                var level_padding = "";
+                for(var j=0;j<level+1;j++) level_padding += "    ";
+
+                if(typeof(arr) == 'object') {  
+                    for(var item in arr) {
+                        var value = arr[item];
+
+                        if(typeof(value) == 'object') { 
+                            dumped_text += level_padding + "'" + item + "' ...\n";
+                            dumped_text += dump(value,level+1);
+                        } else {
+                            dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
+                        }
+                    }
+                } else { 
+                    dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
+                }
+                return dumped_text;
+            }
+
+        </script>
+
+
+    </body>
+</html>
