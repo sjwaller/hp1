@@ -77,6 +77,20 @@ void callback(const sensor_msgs::ImageConstPtr& msg)
     ROS_ERROR("cv_bridge exception: %s", e.what());
     return;
   }
+
+  // cv_bridge::CvImageConstPtr cv_ptr;
+  // try
+  // {
+  //   cv_ptr = cv_bridge::toCvShare(msg, enc::BGR8);
+  // }
+  // catch (cv_bridge::Exception& e)
+  // {
+  //   ROS_ERROR("cv_bridge exception: %s", e.what());
+  //   return;
+  // }
+
+  // Process cv_ptr->image using OpenCV
+
 }
 
 void Vision::convert_image()
