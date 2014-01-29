@@ -6,6 +6,9 @@
 #include <sensor_msgs/RegionOfInterest.h>
 #include <sensor_msgs/Image.h>
 
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+
 class Vision
 {
 public:
@@ -27,12 +30,15 @@ private:
     // Register ROI Publisher
     ros::Publisher roi_pub;
 
+    // Register Image Transport
+    image_transport::ImageTransport it;
+
     // Register Image Subscribers
-    ros::Subscriber image_sub;
+    image_transport::Subscriber image_sub;
 
-    void callback(const sensor_msgs::Image::ConstPtr& msg);
+    void callback(const sensor_msgs::ImageConstPtr& msg);
 
-    void convert_image(sensor_msgs::Image ros_image);
+    void convert_image();
 
     void do_camshift();
 

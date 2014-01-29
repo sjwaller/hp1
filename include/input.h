@@ -13,7 +13,7 @@ public:
 private:
     ros::NodeHandle n;
     
-    void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
+    void callback(const sensor_msgs::Joy::ConstPtr& joy);
     
     int scale_linear_,scale_angular_, deadzone_;
     

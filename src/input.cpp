@@ -24,10 +24,10 @@ Input::Input() :
   n.param("deadzone_", deadzone_, deadzone_);
 
   joy_pub = n.advertise<hp1::input>("hp1/Input", 1);
-  joy_sub = n.subscribe<sensor_msgs::Joy>("joy", 10, &Input::joyCallback, this);
+  joy_sub = n.subscribe<sensor_msgs::Joy>("joy", 10, &Input::callback, this);
 }
 
-void Input::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
+void Input::callback(const sensor_msgs::Joy::ConstPtr& joy)
 {
       hp1::input input;
 

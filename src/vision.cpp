@@ -41,7 +41,7 @@ Vision::Vision()
   Vision inst = *this;
 
   // Register img Subscribers
-  image_sub = n.subscribe("/camera/image_raw", 1000, &Vision::callback, &inst);
+  image_sub = it.subscribe("/camera/image_raw", 1, &Vision::callback, &inst);
 }
 
 void Vision::setup()
@@ -64,17 +64,22 @@ void Vision::publish()
 
 }
 
-void Vision::callback(const sensor_msgs::Image::ConstPtr& msg)
+void callback(const sensor_msgs::ImageConstPtr& msg)
 {
-  /*
-    Header header
-    string name         # name
+  cv_bridge::CvImagePtr cv_ptr;
 
-    msg->name ???
-   */
+  try
+  {
+    cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+  }
+  catch (cv_bridge::Exception& e)
+  {
+    ROS_ERROR("cv_bridge exception: %s", e.what());
+    return;
+  }
 }
 
-void Vision::convert_image(sensor_msgs::Image ros_image)
+void Vision::convert_image()
 {
 
 }
