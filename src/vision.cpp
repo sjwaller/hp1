@@ -41,7 +41,7 @@ Vision::Vision()
   Vision inst = *this;
 
   // Register img Subscribers
-  image_sub = n.subscribe("/camera/image_raw", 1000, &Vision::listen, &inst);
+  image_sub = n.subscribe("/camera/image_raw", 1000, &Vision::callback, &inst);
 }
 
 void Vision::setup()
