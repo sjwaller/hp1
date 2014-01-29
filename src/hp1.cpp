@@ -15,20 +15,20 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "hp1");
 
   // initialize robot	
-  Hp1 *hp1 = new Hp1;
+  Hp1 *node = new Hp1;
 
   // Main loop
   ros::Rate loop_rate(30);
 
-  hp1->setup();
+  node->setup();
   
   while (ros::ok())
   {
-    hp1->update();
+    node->update();
 
-    hp1->process();
+    node->process();
 
-    hp1->publish();
+    node->publish();
 
     ros::spinOnce();
 

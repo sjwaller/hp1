@@ -13,20 +13,20 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "head");
 
   // Initialise robot	
-  Head *head = new Head;
+  Head *node = new Head;
 
   // Main loop
   ros::Rate loop_rate(12);
 
-  head->setup();
+  node->setup();
 
   while (ros::ok())
   {
-    head->update();
+    node->update();
 
-    head->process();
+    node->process();
 
-    head->publish();
+    node->publish();
 
     loop_rate.sleep();
   }

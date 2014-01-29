@@ -40,7 +40,7 @@ private:
     ros::Publisher pan_pub, tilt_pub;
 
     // Register Head Subscribers
-    ros::Subscriber pan_sub, tilt_sub;
+    ros::Subscriber pan_sub, tilt_sub, roi_sub;
 
     // Register Leg Messages
     std_msgs::Float64 pan_msg, tilt_msg;
