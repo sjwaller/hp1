@@ -1,4 +1,12 @@
 <launch>
+    
+    <!-- PS3 joy node -->
+    <node respawn="true" pkg="joy"
+          type="joy_node" name="joy" >
+        <param name="dev" type="string" value="/dev/input/js0" />
+        <param name="deadzone" value="0.00" />
+    </node>
+
     <!-- behavioural state machine -->
     <node name="Hp1" pkg="hp1" type="Hp1" />
     
@@ -6,5 +14,5 @@
     <node name="Input" pkg="hp1" type="Input" />
 
     <!-- pan/tilt and object tracking -->
-    <node name="Head" pkg="hp1" type="Head" />
+    <node name="Legs" pkg="hp1" type="Legs" />
 </launch>

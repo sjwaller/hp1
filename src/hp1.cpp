@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 Hp1::Hp1()
 { 
   // Register input subscriber
-  input_sub = n.subscribe<hp1::input>("hp1/input", 30, &Hp1::inputCallback, this);
+  input_sub = n.subscribe<hp1::input>("hp1/Input", 30, &Hp1::inputCallback, this);
 
   // Register Leg Publishers
   lf_coxa_pub = n.advertise<std_msgs::Float64>("lf_coxa_controller/command", 1);
@@ -173,12 +173,16 @@ if(true)
     if (::g_InControlState.fHexOn) 
     {
       turnRobotOff();
+
+        ROS_INFO_STREAM("Hp1 Off"); 
     } 
     else 
     {
       //Turn on
       ::g_InControlState.fHexOn = 1;
       fAdjustLegPositions = true;
+
+        ROS_INFO_STREAM("Hp1 On"); 
     }
   }
 

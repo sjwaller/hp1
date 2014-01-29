@@ -23,7 +23,7 @@ Input::Input() :
   n.param("scale_angular_", scale_angular_, scale_angular_);
   n.param("deadzone_", deadzone_, deadzone_);
 
-  joy_pub = n.advertise<hp1::input>("hp1/input", 1);
+  joy_pub = n.advertise<hp1::input>("hp1/Input", 1);
   joy_sub = n.subscribe<sensor_msgs::Joy>("joy", 10, &Input::joyCallback, this);
 }
 
