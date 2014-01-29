@@ -69,12 +69,12 @@ Legs::Legs()
 
 void Legs::setup()
 {
-  ::setup();
+
 }
 
 void Legs::update()
 {
-  ::loop();
+
 }
 
 /* Convert radians to servo position offset. */
