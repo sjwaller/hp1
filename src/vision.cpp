@@ -38,10 +38,11 @@ Vision::Vision()
   // Register ROI Publisher
   roi_pub = n.advertise<sensor_msgs::RegionOfInterest>("roi", 1);
 
-  Vision inst = *this;
-
   // Register img Subscribers
-  image_sub = it.subscribe("/camera/image_raw", 1, &Vision::callback, &inst);
+  
+  image_transport::TransportHints hints("compressed", ros::TransportHints());
+
+  image_sub = it.subscribe("/camera/image_raw", 1, &Vision::callback, this, hints);
 }
 
 void Vision::setup()
