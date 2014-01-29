@@ -69,6 +69,12 @@ target_link_libraries(Head
   ${Boost_LIBRARIES}
 )
 
+add_executable(Vision src/vision.cpp)
+target_link_libraries(Vision
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
+)
+
 add_executable(Legs src/legs.cpp)
 target_link_libraries(Legs
   Phoenix
