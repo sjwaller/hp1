@@ -95,7 +95,7 @@ void Vision::is_rect_nonzero()
 }
 
 
-Vision::~Head()
+Vision::~Vision()
 {
 }
 
