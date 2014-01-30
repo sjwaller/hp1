@@ -67,7 +67,7 @@ void Vision::publish()
 
 }
 
-void callback(const sensor_msgs::ImageConstPtr& msg)
+void Vision::callback(const sensor_msgs::ImageConstPtr& msg)
 {
   cv_bridge::CvImagePtr cv_ptr;
 
