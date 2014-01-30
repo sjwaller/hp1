@@ -8,10 +8,10 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-  // Initialise ROS	
+  // Initialise ROS
   ros::init(argc, argv, "vision");
 
-  // Initialise robot	
+  // Initialise robot
   Vision *node = new Vision;
 
   // Main loop
@@ -42,8 +42,7 @@ Vision::Vision()
       // Register Image Transport
   image_transport::ImageTransport it(n);
 
-//  image_transport::TransportHints hints("compressed", ros::TransportHints());
-
+  //  image_transport::TransportHints hints("compressed", ros::TransportHints());
   image_sub = it.subscribe("/camera/image_raw", 1, &Vision::callback, this);
 }
 
@@ -69,28 +68,28 @@ void Vision::publish()
 
 void Vision::callback(const sensor_msgs::ImageConstPtr& msg)
 {
-  // cv_bridge::CvImagePtr cv_ptr;
+   //cv_bridge::CvImagePtr cv_ptr;
 
-  // try
-  // {
-  //   cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-  // }
-  // catch (cv_bridge::Exception& e)
-  // {
-  //   ROS_ERROR("cv_bridge exception: %s", e.what());
-  //   return;
-  // }
+   //try
+   //{
+   // cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+   //}
+   //catch (cv_bridge::Exception& e)
+   //{
+   //  ROS_ERROR("cv_bridge exception: %s", e.what());
+   //  return;
+   //}
 
-  // cv_bridge::CvImageConstPtr cv_ptr;
-  // try
-  // {
-  //   cv_ptr = cv_bridge::toCvShare(msg, enc::BGR8);
-  // }
-  // catch (cv_bridge::Exception& e)
-  // {
-  //   ROS_ERROR("cv_bridge exception: %s", e.what());
-  //   return;
-  // }
+  cv_bridge::CvImageConstPtr cv_ptr;
+  try
+  {
+     cv_ptr = cv_bridge::toCvShare(msg, sensor_msgs::image_encodings::BGR8);
+  }
+  catch (cv_bridge::Exception& e)
+  {
+     ROS_ERROR("cv_bridge exception: %s", e.what());
+     return;
+  }
 
   // Process cv_ptr->image using OpenCV
 
