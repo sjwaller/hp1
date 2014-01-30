@@ -36,9 +36,6 @@ private:
     // Register ROI Publisher
     ros::Publisher roi_pub;
 
-    // Register Image Transport
-    image_transport::ImageTransport it;
-
     // Register Image Subscribers
     image_transport::Subscriber image_sub;
 
