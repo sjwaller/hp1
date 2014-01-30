@@ -44,7 +44,7 @@ Vision::Vision()
 
 //  image_transport::TransportHints hints("compressed", ros::TransportHints());
 
-  image_sub = it.subscribe("/camera/image_raw", 1, &Vision::callback);
+  image_sub = it.subscribe("/camera/image_raw", 1, &Vision::callback, this);
 }
 
 void Vision::setup()
@@ -69,17 +69,17 @@ void Vision::publish()
 
 void Vision::callback(const sensor_msgs::ImageConstPtr& msg)
 {
-  cv_bridge::CvImagePtr cv_ptr;
+  // cv_bridge::CvImagePtr cv_ptr;
 
-  try
-  {
-    cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-  }
-  catch (cv_bridge::Exception& e)
-  {
-    ROS_ERROR("cv_bridge exception: %s", e.what());
-    return;
-  }
+  // try
+  // {
+  //   cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+  // }
+  // catch (cv_bridge::Exception& e)
+  // {
+  //   ROS_ERROR("cv_bridge exception: %s", e.what());
+  //   return;
+  // }
 
   // cv_bridge::CvImageConstPtr cv_ptr;
   // try
