@@ -4,6 +4,7 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <hp1/input.h>
+#include <hp1/robot.h>
 
 //#include "robot/robot.h"
 
@@ -57,6 +58,10 @@ private:
     ros::NodeHandle n;
 
     ros::Subscriber input_sub;
+
+    ros::Publisher robot_pub;
+
+    hp1::robot robot;
 
   	void inputCallback(const hp1::input::ConstPtr& msg);
 

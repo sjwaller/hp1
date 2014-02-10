@@ -4,7 +4,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/String.h>
-
+#include <hp1/robot.h>
 class Legs
 {
 public:
@@ -23,6 +23,10 @@ public:
 private:
 	
     ros::NodeHandle n;
+
+    ros::Subscriber robot_sub;
+
+    void callback(const hp1::robot::ConstPtr& robot);
 
     // Register Leg Publishers
     ros::Publisher rr_coxa_pub, rr_tibia_pub, rr_femur_pub;

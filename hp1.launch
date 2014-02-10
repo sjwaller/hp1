@@ -15,4 +15,8 @@
 
     <!-- pan/tilt and object tracking -->
     <node name="Legs" pkg="hp1" type="Legs" />
+
+    <node name="Vision" pkg="hp1" type="Vision" />
+
+    <node name="Head" pkg="hp1" type="Head" />
 </launch>

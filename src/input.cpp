@@ -8,9 +8,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "input");
-
   Input input;
-  
   ros::spin();
 }
 

@@ -11,10 +11,10 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-  // initialize ROS	
+  // initialize ROS
   ros::init(argc, argv, "hp1");
 
-  // initialize robot	
+  // initialize robot
   Hp1 *node = new Hp1;
 
   // Main loop
@@ -26,9 +26,11 @@ int main(int argc, char** argv)
   {
     node->update();
 
-    node->process();
-
-    node->publish();
+    if (::g_InControlState.fHexOn) 
+    {
+      node->process();
+      node->publish();
+    }
 
     ros::spinOnce();
 
@@ -42,6 +44,8 @@ Hp1::Hp1()
 { 
   // Register input subscriber
   input_sub = n.subscribe<hp1::input>("hp1/Input", 30, &Hp1::inputCallback, this);
+  
+  robot_pub = n.advertise<hp1::robot>("hp1/Robot", 1);
 
   ROS_INFO_STREAM("Hp1 Initialized");
 }
@@ -72,12 +76,34 @@ void Hp1::update()
 
 void Hp1::process()
 {
+      robot.angles[0] = CoxaAngle1[5];
+      robot.angles[1] = FemurAngle1[5];
+      robot.angles[2] = TibiaAngle1[5];
 
+      robot.angles[3] = CoxaAngle1[4];
+      robot.angles[4] = FemurAngle1[4];
+      robot.angles[5] = TibiaAngle1[4];
+
+      robot.angles[6] = CoxaAngle1[3];
+      robot.angles[7] = FemurAngle1[3];
+      robot.angles[8] = TibiaAngle1[3];
+
+      robot.angles[9] = -CoxaAngle1[2];
+      robot.angles[10] = -FemurAngle1[2];
+      robot.angles[11] = -TibiaAngle1[2];
+
+      robot.angles[12] = -CoxaAngle1[1];
+      robot.angles[13] = -FemurAngle1[1];
+      robot.angles[14] = -TibiaAngle1[1];
+
+      robot.angles[15] = -CoxaAngle1[0];
+      robot.angles[16] = -FemurAngle1[0];
+      robot.angles[17] = -TibiaAngle1[0];
 }
 
 void Hp1::publish()
 {
-
+   robot_pub.publish(robot);
 }
 
 void Hp1::inputCallback(const hp1::input::ConstPtr& msg)
@@ -91,21 +117,21 @@ if(true)
   g_sPS2ErrorCnt = 0;    // clear out error count...
 
   // OK lets try "0" button for Start. 
-  if (msg->buttons[PSB_START]) 
+  if (msg->buttons[PSB_START])
   {
     if (::g_InControlState.fHexOn) 
     {
       turnRobotOff();
 
         ROS_INFO_STREAM("Hp1 Off"); 
-    } 
-    else 
+    }
+    else
     {
       //Turn on
       ::g_InControlState.fHexOn = 1;
       fAdjustLegPositions = true;
 
-        ROS_INFO_STREAM("Hp1 On"); 
+        ROS_INFO_STREAM("Hp1 On");
     }
   }
 

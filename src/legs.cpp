@@ -3,7 +3,7 @@
 #include <iostream>
 #include <ros/ros.h>
 #include <std_msgs/Float64.h>
-#include <phoenix.h>
+//#include <phoenix.h>
 #include <legs.h>
 
 const float DEG2RAD = 0.01745;
@@ -41,6 +41,9 @@ int main(int argc, char **argv)
 
 Legs::Legs()
 {
+ // Register input subscriber
+  robot_sub = n.subscribe<hp1::robot>("hp1/Robot", 30, &Legs::callback, this);
+
   // Register Leg Publishers
   lf_coxa_pub = n.advertise<std_msgs::Float64>("lf_coxa_controller/command", 1);
   lf_femur_pub = n.advertise<std_msgs::Float64>("lf_femur_controller/command", 1);
@@ -90,7 +93,8 @@ double Legs::tickToRad(int tick)
 	return ((double)tick-512) * 0.0051;
 }
 
-void Legs::process()
+
+void Legs::callback(const hp1::robot::ConstPtr& robot)
 {
   // Set Leg Message Data
   #define cPwmMult      128
@@ -99,29 +103,63 @@ void Legs::process()
   
   // radians = tickToRad((((angle))* cPwmMult) / cPwmDiv +cPFConst);
 
-  lf_coxa_msg.data =  tickToRad((((CoxaAngle1[5]))  * cPwmMult) / cPwmDiv + cPFConst);
-  lf_femur_msg.data = tickToRad((((FemurAngle1[5])) * cPwmMult) / cPwmDiv + cPFConst);
-  lf_tibia_msg.data = tickToRad((((TibiaAngle1[5])) * cPwmMult) / cPwmDiv + cPFConst);
+  lf_coxa_msg.data =  tickToRad((((robot->angles[0]))  * cPwmMult) / cPwmDiv + cPFConst);
+  lf_femur_msg.data = tickToRad((((robot->angles[1])) * cPwmMult) / cPwmDiv + cPFConst);
+  lf_tibia_msg.data = tickToRad((((robot->angles[2])) * cPwmMult) / cPwmDiv + cPFConst);
 
-  lm_coxa_msg.data =  tickToRad((((CoxaAngle1[4]))  * cPwmMult) / cPwmDiv + cPFConst);
-  lm_femur_msg.data = tickToRad((((FemurAngle1[4])) * cPwmMult) / cPwmDiv + cPFConst);
-  lm_tibia_msg.data = tickToRad((((TibiaAngle1[4])) * cPwmMult) / cPwmDiv + cPFConst);
+  lm_coxa_msg.data =  tickToRad((((robot->angles[3]))  * cPwmMult) / cPwmDiv + cPFConst);
+  lm_femur_msg.data = tickToRad((((robot->angles[4])) * cPwmMult) / cPwmDiv + cPFConst);
+  lm_tibia_msg.data = tickToRad((((robot->angles[5])) * cPwmMult) / cPwmDiv + cPFConst);
 
-  lr_coxa_msg.data =  tickToRad((((CoxaAngle1[3]))  * cPwmMult) / cPwmDiv + cPFConst);
-  lr_femur_msg.data = tickToRad((((FemurAngle1[3])) * cPwmMult) / cPwmDiv + cPFConst);
-  lr_tibia_msg.data = tickToRad((((TibiaAngle1[3])) * cPwmMult) / cPwmDiv + cPFConst);
+  lr_coxa_msg.data =  tickToRad((((robot->angles[6]))  * cPwmMult) / cPwmDiv + cPFConst);
+  lr_femur_msg.data = tickToRad((((robot->angles[7])) * cPwmMult) / cPwmDiv + cPFConst);
+  lr_tibia_msg.data = tickToRad((((robot->angles[8])) * cPwmMult) / cPwmDiv + cPFConst);
 
-  rf_coxa_msg.data =  tickToRad((((-CoxaAngle1[2]))  * cPwmMult) / cPwmDiv + cPFConst);
-  rf_femur_msg.data = tickToRad((((-FemurAngle1[2])) * cPwmMult) / cPwmDiv + cPFConst);
-  rf_tibia_msg.data = tickToRad((((-TibiaAngle1[2])) * cPwmMult) / cPwmDiv + cPFConst);
+  rf_coxa_msg.data =  tickToRad((((robot->angles[9]))  * cPwmMult) / cPwmDiv + cPFConst);
+  rf_femur_msg.data = tickToRad((((robot->angles[10])) * cPwmMult) / cPwmDiv + cPFConst);
+  rf_tibia_msg.data = tickToRad((((robot->angles[11])) * cPwmMult) / cPwmDiv + cPFConst);
 
-  rm_coxa_msg.data =  tickToRad((((-CoxaAngle1[1]))  * cPwmMult) / cPwmDiv + cPFConst);
-  rm_femur_msg.data = tickToRad((((-FemurAngle1[1])) * cPwmMult) / cPwmDiv + cPFConst);
-  rm_tibia_msg.data = tickToRad((((-TibiaAngle1[1])) * cPwmMult) / cPwmDiv + cPFConst);
+  rm_coxa_msg.data =  tickToRad((((robot->angles[12]))  * cPwmMult) / cPwmDiv + cPFConst);
+  rm_femur_msg.data = tickToRad((((robot->angles[13])) * cPwmMult) / cPwmDiv + cPFConst);
+  rm_tibia_msg.data = tickToRad((((robot->angles[14])) * cPwmMult) / cPwmDiv + cPFConst);
 
-  rr_coxa_msg.data =  tickToRad((((-CoxaAngle1[0]))  * cPwmMult) / cPwmDiv + cPFConst);
-  rr_femur_msg.data = tickToRad((((-FemurAngle1[0])) * cPwmMult) / cPwmDiv + cPFConst);
-  rr_tibia_msg.data = tickToRad((((-TibiaAngle1[0])) * cPwmMult) / cPwmDiv + cPFConst);
+  rr_coxa_msg.data =  tickToRad((((robot->angles[15]))  * cPwmMult) / cPwmDiv + cPFConst);
+  rr_femur_msg.data = tickToRad((((robot->angles[16])) * cPwmMult) / cPwmDiv + cPFConst);
+  rr_tibia_msg.data = tickToRad((((robot->angles[17])) * cPwmMult) / cPwmDiv + cPFConst);
+}
+
+void Legs::process()
+{
+  // // Set Leg Message Data
+  // #define cPwmMult      128
+  // #define cPwmDiv       375  
+  // #define cPFConst      512 // half of our 1024 range
+  
+  // // radians = tickToRad((((angle))* cPwmMult) / cPwmDiv +cPFConst);
+
+  // lf_coxa_msg.data =  tickToRad((((CoxaAngle1[5]))  * cPwmMult) / cPwmDiv + cPFConst);
+  // lf_femur_msg.data = tickToRad((((FemurAngle1[5])) * cPwmMult) / cPwmDiv + cPFConst);
+  // lf_tibia_msg.data = tickToRad((((TibiaAngle1[5])) * cPwmMult) / cPwmDiv + cPFConst);
+
+  // lm_coxa_msg.data =  tickToRad((((CoxaAngle1[4]))  * cPwmMult) / cPwmDiv + cPFConst);
+  // lm_femur_msg.data = tickToRad((((FemurAngle1[4])) * cPwmMult) / cPwmDiv + cPFConst);
+  // lm_tibia_msg.data = tickToRad((((TibiaAngle1[4])) * cPwmMult) / cPwmDiv + cPFConst);
+
+  // lr_coxa_msg.data =  tickToRad((((CoxaAngle1[3]))  * cPwmMult) / cPwmDiv + cPFConst);
+  // lr_femur_msg.data = tickToRad((((FemurAngle1[3])) * cPwmMult) / cPwmDiv + cPFConst);
+  // lr_tibia_msg.data = tickToRad((((TibiaAngle1[3])) * cPwmMult) / cPwmDiv + cPFConst);
+
+  // rf_coxa_msg.data =  tickToRad((((-CoxaAngle1[2]))  * cPwmMult) / cPwmDiv + cPFConst);
+  // rf_femur_msg.data = tickToRad((((-FemurAngle1[2])) * cPwmMult) / cPwmDiv + cPFConst);
+  // rf_tibia_msg.data = tickToRad((((-TibiaAngle1[2])) * cPwmMult) / cPwmDiv + cPFConst);
+
+  // rm_coxa_msg.data =  tickToRad((((-CoxaAngle1[1]))  * cPwmMult) / cPwmDiv + cPFConst);
+  // rm_femur_msg.data = tickToRad((((-FemurAngle1[1])) * cPwmMult) / cPwmDiv + cPFConst);
+  // rm_tibia_msg.data = tickToRad((((-TibiaAngle1[1])) * cPwmMult) / cPwmDiv + cPFConst);
+
+  // rr_coxa_msg.data =  tickToRad((((-CoxaAngle1[0]))  * cPwmMult) / cPwmDiv + cPFConst);
+  // rr_femur_msg.data = tickToRad((((-FemurAngle1[0])) * cPwmMult) / cPwmDiv + cPFConst);
+  // rr_tibia_msg.data = tickToRad((((-TibiaAngle1[0])) * cPwmMult) / cPwmDiv + cPFConst);
 }
 
 void Legs::publish()

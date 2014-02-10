@@ -21,6 +21,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 ## Generate messages in the 'msg' folder
  add_message_files(FILES
 	input.msg
+  robot.msg
  )
 
 ## Generate services in the 'srv' folder
