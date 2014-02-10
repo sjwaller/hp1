@@ -12,7 +12,7 @@
 /*
  *
  * http://wiki.ros.org/cv_bridge/Tutorials/UsingCvBridgeToConvertBetweenROSImagesAndOpenCVImages
- *
+ * 
  */
 
 class Vision
