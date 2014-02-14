@@ -105,7 +105,7 @@ void Vision::camShift(Mat inImg)
   static int hsize = 16;
   static float hranges[] = {0,180};
   static const float* phranges = hranges;
-  static Mat frame, hsv, hue, mask, hist = Mat::zeros(200, 320, CV_8UC3), backproj;
+  static Mat frame, hsv, gsf, hue, mask, hist = Mat::zeros(200, 320, CV_8UC3), backproj;
   RotatedRect trackBox;
 
   //If the image processing is not paused
@@ -129,14 +129,14 @@ void Vision::camShift(Mat inImg)
       if(trackObject == 0)
       {
           //convert captured image to gray scale and equalize
-          cvtColor(captureFrame, grayscaleFrame, CV_BGR2GRAY);
-          equalizeHist(grayscaleFrame, grayscaleFrame);
+          cvtColor(image, gsf, CV_BGR2GRAY);
+          equalizeHist(gsf, gsf);
    
           //create a vector array to store the face found
           std::vector<Rect> faces;
    
           //find faces and store them in the vector array
-          face_cascade.detectMultiScale(grayscaleFrame, faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT|CV_HAAR_SCALE_IMAGE, Size(30,30));
+          face_cascade.detectMultiScale(gsf, faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT|CV_HAAR_SCALE_IMAGE, Size(30,30));
    
           //draw a rectangle for all found faces in the vector array on the original image
           for(int i = 0; i < faces.size(); i++)
