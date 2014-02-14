@@ -83,7 +83,7 @@ void Vision::imageCallback(const sensor_msgs::ImageConstPtr& original_image)
   {
     //Always copy, returning a mutable CvImage
     //OpenCV expects color images to use BGR channel order.
-    cv_ptr = cv_bridge::toCvCopy(original_image, enc::BGR8);
+    cv_ptr = cv_bridge::toCvCopy(original_image, sensor_msgs::image_encodings::BGR8);
   }
   catch (cv_bridge::Exception& e)
   {
