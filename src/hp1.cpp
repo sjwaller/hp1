@@ -43,9 +43,9 @@ int main(int argc, char** argv)
 Hp1::Hp1()
 { 
   // Register input subscriber
-  input_sub = n.subscribe<hp1::input>("hp1/Input", 30, &Hp1::inputCallback, this);
+  input_sub = n.subscribe<hp1::input>("hp1/input", 30, &Hp1::inputCallback, this);
   
-  robot_pub = n.advertise<hp1::robot>("hp1/Robot", 1);
+  robot_pub = n.advertise<hp1::robot>("hp1/robot", 1);
 
   ROS_INFO_STREAM("Hp1 Initialized");
 }

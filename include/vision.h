@@ -23,32 +23,57 @@ public:
     virtual ~Vision();
 
     void setup();
-
     void update();
-
     void process();
-
     void publish();
 
 private:
     ros::NodeHandle n;
 
-    // Register ROI Publisher
+    // Register Publishers
+    ros::Publisher robot_angle_pub;
+
     ros::Publisher roi_pub;
 
-    // Register Image Subscribers
+    /* State is published according to the following enum
+     * 0: Waiting for destination
+     * 1: Destination tracking enabled
+     * 2: Destination Lost
+     * 3..255: TBD
+     */
+    ros::Publisher state_pub;
+
+    // Register Subscribers
     image_transport::Subscriber image_sub;
 
-    void callback(const sensor_msgs::ImageConstPtr& msg);
+    ros::Subscriber camera_info_sub;
 
-    void convert_image();
+    ros::Subscriber dest_coord_sub;
 
-    void do_camshift();
+    // Declare Variables
+    std_msgs::UInt8 state;
+    int trackObject;
+    bool paused;
 
-    void hue_histogram_as_image();
+    Rect selection;
 
-    void is_rect_nonzero();
+    int vmin;
+    int vmax;
+    int smin;
 
+    Mat image;
+    int imgWidth;
+    int imgHeight;
+
+    // Define callbacks
+    void camInfoCallback(const sensor_msgs::CameraInfo & camInfoMsg);
+    void destCoordCallback(const sensor_msgs::RegionOfInterest& destROI);
+    void imageCallback(const sensor_msgs::ImageConstPtr& original_image);
+  
+    void trackArea(Rect window);
+    void calcAngle(Point2f destCentre);
+    void camShift(Mat inImg);
+  
 };
 
 #endif	/* VISION_H */

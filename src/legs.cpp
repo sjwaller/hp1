@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 Legs::Legs()
 {
  // Register input subscriber
-  robot_sub = n.subscribe<hp1::robot>("hp1/Robot", 30, &Legs::callback, this);
+  robot_sub = n.subscribe<hp1::robot>("hp1/robot", 30, &Legs::callback, this);
 
   // Register Leg Publishers
   lf_coxa_pub = n.advertise<std_msgs::Float64>("lf_coxa_controller/command", 1);
