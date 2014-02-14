@@ -12,6 +12,7 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 
+#include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
@@ -20,7 +21,6 @@
 
 using namespace cv;
 using namespace std;
-
 
 /*
  *
@@ -45,7 +45,6 @@ private:
 
     // Register Publishers
     ros::Publisher robot_angle_pub;
-
     ros::Publisher roi_pub;
 
     /* State is published according to the following enum
@@ -58,16 +57,15 @@ private:
 
     // Register Subscribers
     image_transport::Subscriber image_sub;
-
     ros::Subscriber camera_info_sub;
 
-    ros::Subscriber dest_coord_sub;
-
+    //create the cascade classifier object used for the face detection
+    CascadeClassifier face_cascade;
+ 
     // Declare Variables
     std_msgs::UInt8 state;
     int trackObject;
     bool paused;
-
     Rect selection;
 
     int vmin;
@@ -80,7 +78,6 @@ private:
 
     // Define callbacks
     void camInfoCallback(const sensor_msgs::CameraInfo & camInfoMsg);
-    void destCoordCallback(const sensor_msgs::RegionOfInterest& destROI);
     void imageCallback(const sensor_msgs::ImageConstPtr& original_image);
   
     void trackArea(Rect window);

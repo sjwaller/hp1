@@ -54,6 +54,9 @@ void Vision::setup()
   vmin = 10;
   vmax = 256;
   smin = 30;
+
+  //use the haarcascade_frontalface_alt.xml library
+  face_cascade.load("haarcascade_frontalface_alt.xml");
 }
 
 void Vision::update()
@@ -122,17 +125,43 @@ void Vision::camShift(Mat inImg)
 
   if(!paused)
   {
+      // Try and detect a face and start tracking
+      if(trackObject == 0)
+      {
+          //convert captured image to gray scale and equalize
+          cvtColor(captureFrame, grayscaleFrame, CV_BGR2GRAY);
+          equalizeHist(grayscaleFrame, grayscaleFrame);
+   
+          //create a vector array to store the face found
+          std::vector<Rect> faces;
+   
+          //find faces and store them in the vector array
+          face_cascade.detectMultiScale(grayscaleFrame, faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT|CV_HAAR_SCALE_IMAGE, Size(30,30));
+   
+          //draw a rectangle for all found faces in the vector array on the original image
+          for(int i = 0; i < faces.size(); i++)
+          {
+              selection.x = faces[i].x;
+              selection.y = faces[i].y;
+              selection.height = faces[i].height;
+              selection.width = faces[i].width;
+              trackObject = -1;
+              break;
+          }
+      }
+
       //Convert the colour space to HSV
       cvtColor(image, hsv, CV_BGR2HSV);
 
       // If the destination coordinates have been received, then start the tracking
       // trackObject is set when the destination coordinates have been received
-      if( trackObject )
+      if( trackObject != 0)
       {
           int _vmin = vmin, _vmax = vmax;
 
           inRange(hsv, Scalar(0, smin, MIN(_vmin,_vmax)),
                   Scalar(180, 256, MAX(_vmin, _vmax)), mask);
+
           int ch[] = {0, 0};
           hue.create(hsv.size(), hsv.depth());
           mixChannels(&hsv, 1, &hue, 1, ch, 1);
@@ -143,7 +172,7 @@ void Vision::camShift(Mat inImg)
               // Publish that we have started tracking
               state.data = 1;
               state_pub.publish(state);
-              
+            
               // Set the Region of interest and the mask for it
               Mat roi(hue, selection), maskroi(mask, selection);
               
@@ -179,7 +208,7 @@ void Vision::camShift(Mat inImg)
   }
   else if( trackObject < 0 )
   {
-    //If a new destination has been selected stop pausing
+    // If a new destination has been selected stop pausing
     paused = false;
   }
 
