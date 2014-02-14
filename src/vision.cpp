@@ -6,8 +6,6 @@
 
 using namespace std;
 
-// https://github.com/ashokzg/ecp/blob/master/src/CamShiftDestTracker.cpp
-
 int main(int argc, char **argv)
 {
   // Initialise ROS
@@ -41,9 +39,9 @@ Vision::Vision()
   camera_info_sub     = n.subscribe("camera/camera_info", 1, &Vision::camInfoCallback, this);
   
   // Register ROI Publishers
-  roi_pub             = n.advertise<sensor_msgs::RegionOfInterest>("roi", 10);
-  robot_angle_pub     = n.advertise<std_msgs::Float32>("robot_angle", 100);
-  state_pub           = n.advertise<std_msgs::UInt8>("state", 10);
+  roi_pub             = n.advertise<sensor_msgs::RegionOfInterest>("hp1/vision_roi", 10);
+  robot_angle_pub     = n.advertise<std_msgs::Float32>("hp1/vision_angle", 100);
+  state_pub           = n.advertise<std_msgs::UInt8>("hp1/vision_state", 10);
 }
 
 void Vision::setup()
