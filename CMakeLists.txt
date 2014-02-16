@@ -112,7 +112,7 @@ target_link_libraries(Hp1
 # )
 
 ## Mark executables and/or libraries for installation
- install(TARGETS Hp1 Head Legs Input Joint_Publisher
+ install(TARGETS Hp1 Head Legs Input Vision
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
