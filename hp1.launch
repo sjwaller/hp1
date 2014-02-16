@@ -13,10 +13,12 @@
     <!-- input controller -->
     <node name="Input" pkg="hp1" type="Input" />
 
-    <!-- pan/tilt and object tracking -->
+    <!-- legs -->
     <node name="Legs" pkg="hp1" type="Legs" />
 
+    <!-- object tracking -->
     <node name="Vision" pkg="hp1" type="Vision" />
 
+    <!-- pan/tilt -->
     <node name="Head" pkg="hp1" type="Head" />
 </launch>

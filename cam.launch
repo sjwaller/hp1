@@ -5,7 +5,7 @@
   </include>
 
   <!-- Set this to your camera's name -->
-  <arg name="cam_name" value="hp1_cam" />
+  <arg name="cam_name" value="hp1" />
 
   <!-- Start the GSCAM node -->
   <node pkg="gscam" type="gscam" name="$(arg cam_name)">

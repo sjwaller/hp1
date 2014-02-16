@@ -2,12 +2,11 @@
 #define	HEAD_H
 
 #include <ros/ros.h>
+#include <std_msgs/Float32.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/String.h>
-#include <sensor_msgs/JointState.h>
-#include <dynamixel_msgs/JointState.h>
-
-const double degree = M_PI / 180;
+#include <std_msgs/UInt8.h>
+#include <sensor_msgs/RegionOfInterest.h>
 
 // Head Angles
 double pan_angle, tilt_angle;
@@ -30,22 +29,23 @@ public:
 private:
     ros::NodeHandle n;
 
-    // Register Joint Publisher
-    ros::Publisher joint_pub;
-
-    // message declarations
-    sensor_msgs::JointState joint_state;
+    // Register Vision Subscribers
+    ros::Subscriber roi_sub, robot_angle_sub, state_sub;
 
     // Register Head Publishers
     ros::Publisher pan_pub, tilt_pub;
-
-    // Register Head Subscribers
-    ros::Subscriber pan_sub, tilt_sub, roi_sub;
-
-    // Register Leg Messages
+    
+    // Register Head Messages
     std_msgs::Float64 pan_msg, tilt_msg;
+    
+    // Helper functions
+    int radToServo(float rads);
+    double tickToRad(int tick);
 
-    void listen(const dynamixel_msgs::JointState::ConstPtr& msg);
+    // Define callbacks
+    void roiCallback(const sensor_msgs::RegionOfInterest::ConstPtr& msg);
+    void angleCallback(const std_msgs::Float32::ConstPtr& msg);
+    void stateCallback(const std_msgs::UInt8::ConstPtr& msg);
 };
 
 #endif	/* HEAD_H */

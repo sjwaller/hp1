@@ -97,15 +97,6 @@ target_link_libraries(Hp1
   ${Boost_LIBRARIES}
 )
 
-add_executable(Joint_Publisher src/joint_publisher.cpp)
-target_link_libraries(Joint_Publisher
-  Phoenix
-  ${catkin_LIBRARIES}
-  ${Boost_LIBRARIES}
-)
-
-
-
 #############
 ## Install ##
 #############

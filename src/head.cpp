@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   Head *node = new Head;
 
   // Main loop
-  ros::Rate loop_rate(12);
+  ros::Rate loop_rate(30);
 
   node->setup();
 
@@ -36,46 +36,41 @@ int main(int argc, char **argv)
 
 Head::Head()
 {
-  // Register Joint Publisher
-  joint_pub = n.advertise<sensor_msgs::JointState>("joint_states", 1);
-
-  // Configure Joint States
-  joint_state.name.resize(2);
-  joint_state.position.resize(2);
-
-  joint_state.name[0] = "pan_joint";
-  joint_state.name[1] = "tilt_joint";
-
   // Register Head Publishers
   pan_pub = n.advertise<std_msgs::Float64>("pan_controller/command", 1);
   tilt_pub = n.advertise<std_msgs::Float64>("tilt_controller/command", 1);
 
-  Head inst = *this;
-
-  // Register Head Subscribers
-  pan_sub = n.subscribe("pan_controller/state", 1000, &Head::listen, &inst);
-  tilt_sub = n.subscribe("tilt_controller/state", 1000, &Head::listen, &inst);
+  // Register Vision Subscribers
+  roi_sub             = n.subscribe<sensor_msgs::RegionOfInterest>("hp1/vision_roi", 10, &Head::roiCallback, this);
+  robot_angle_sub     = n.subscribe<std_msgs::Float32>("hp1/vision_angle", 10, &Head::angleCallback, this);
+  state_sub           = n.subscribe<std_msgs::UInt8>("hp1/vision_state", 10, &Head::stateCallback, this);
 }
 
 void Head::setup()
 {
-
+  ROS_INFO_STREAM("Head Initialized");
 }
 
 void Head::update()
 {
-
+  // Calculate angles
+  pan_angle = 0;
+  tilt_angle = 0;
 }
 
 void Head::process()
 {
-  // Set Leg Message Data
+  // Set Head Message Data
+  #define cPwmMult      128
+  #define cPwmDiv       375  
+  #define cPFConst      512 // half of our 1024 range
+  
+  pan_msg.data =  tickToRad((((pan_angle))  * cPwmMult) / cPwmDiv + cPFConst);
+  tilt_msg.data = tickToRad((((tilt_angle)) * cPwmMult) / cPwmDiv + cPFConst);
+
+  // Set Message Data
   pan_msg.data = pan_angle;
   tilt_msg.data = tilt_angle;
-
-  // Set Joint State Positions
-  joint_state.position[0] = pan_angle;
-  joint_state.position[1] = tilt_angle;
 }
 
 void Head::publish()
@@ -83,38 +78,41 @@ void Head::publish()
   // Publish Head Message Data
   pan_pub.publish(pan_msg);
   tilt_pub.publish(tilt_msg);
-
-  // Publish Joint State Positions
-  joint_state.header.stamp = ros::Time::now();
-  joint_pub.publish(joint_state);
 }
 
-void Head::listen(const dynamixel_msgs::JointState::ConstPtr& msg)
+/* Convert radians to servo position offset. */
+int Head::radToServo(float rads)
 {
-  /*
-    Header header
-    string name         # joint name
-    int32[] motor_ids   # motor ids controlling this joint
-    int32[] motor_temps # motor temperatures, same order as motor_ids
+  float val = (rads*100)/51 * 100;
+  return (int) val;
+}
 
-    float64 goal_pos    # commanded position (in radians)
-    float64 current_pos # current joint position (in radians)
-    float64 error       # error between commanded and current positions (in radians)
-    float64 velocity    # current joint speed (in radians per second)
-    float64 load        # current load
-    bool is_moving      # is joint currently in motion
-   */
+/* Convert servo position offset to radians*/
+double Head::tickToRad(int tick)
+{
+  return ((double)tick-512) * 0.0051;
+}
 
-  for (int i = 0; i < 2; i++)
-  {
-    if (joint_state.name[i] == msg->name)
-    {
-      joint_state.position[i] = msg->current_pos;
-    }
-  }
+void Head::roiCallback(const sensor_msgs::RegionOfInterest::ConstPtr& msg)
+{
+  ROS_INFO_STREAM("Head roiCallback");
+  // msg->current_pos
+}
+
+void Head::angleCallback(const std_msgs::Float32::ConstPtr& msg)
+{
+  ROS_INFO_STREAM("Head angleCallback");
+  // msg->current_pos
+}
+
+void Head::stateCallback(const std_msgs::UInt8::ConstPtr& msg)
+{
+  ROS_INFO_STREAM("Head stateCallback");
+  // msg->current_pos
 }
 
 Head::~Head()
 {
+
 }
 

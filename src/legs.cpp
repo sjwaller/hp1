@@ -3,7 +3,6 @@
 #include <iostream>
 #include <ros/ros.h>
 #include <std_msgs/Float64.h>
-//#include <phoenix.h>
 #include <legs.h>
 
 const float DEG2RAD = 0.01745;
@@ -72,7 +71,7 @@ Legs::Legs()
 
 void Legs::setup()
 {
-
+  ROS_INFO_STREAM("Legs Initialized");
 }
 
 void Legs::update()
@@ -130,36 +129,7 @@ void Legs::callback(const hp1::robot::ConstPtr& robot)
 
 void Legs::process()
 {
-  // // Set Leg Message Data
-  // #define cPwmMult      128
-  // #define cPwmDiv       375  
-  // #define cPFConst      512 // half of our 1024 range
-  
-  // // radians = tickToRad((((angle))* cPwmMult) / cPwmDiv +cPFConst);
 
-  // lf_coxa_msg.data =  tickToRad((((CoxaAngle1[5]))  * cPwmMult) / cPwmDiv + cPFConst);
-  // lf_femur_msg.data = tickToRad((((FemurAngle1[5])) * cPwmMult) / cPwmDiv + cPFConst);
-  // lf_tibia_msg.data = tickToRad((((TibiaAngle1[5])) * cPwmMult) / cPwmDiv + cPFConst);
-
-  // lm_coxa_msg.data =  tickToRad((((CoxaAngle1[4]))  * cPwmMult) / cPwmDiv + cPFConst);
-  // lm_femur_msg.data = tickToRad((((FemurAngle1[4])) * cPwmMult) / cPwmDiv + cPFConst);
-  // lm_tibia_msg.data = tickToRad((((TibiaAngle1[4])) * cPwmMult) / cPwmDiv + cPFConst);
-
-  // lr_coxa_msg.data =  tickToRad((((CoxaAngle1[3]))  * cPwmMult) / cPwmDiv + cPFConst);
-  // lr_femur_msg.data = tickToRad((((FemurAngle1[3])) * cPwmMult) / cPwmDiv + cPFConst);
-  // lr_tibia_msg.data = tickToRad((((TibiaAngle1[3])) * cPwmMult) / cPwmDiv + cPFConst);
-
-  // rf_coxa_msg.data =  tickToRad((((-CoxaAngle1[2]))  * cPwmMult) / cPwmDiv + cPFConst);
-  // rf_femur_msg.data = tickToRad((((-FemurAngle1[2])) * cPwmMult) / cPwmDiv + cPFConst);
-  // rf_tibia_msg.data = tickToRad((((-TibiaAngle1[2])) * cPwmMult) / cPwmDiv + cPFConst);
-
-  // rm_coxa_msg.data =  tickToRad((((-CoxaAngle1[1]))  * cPwmMult) / cPwmDiv + cPFConst);
-  // rm_femur_msg.data = tickToRad((((-FemurAngle1[1])) * cPwmMult) / cPwmDiv + cPFConst);
-  // rm_tibia_msg.data = tickToRad((((-TibiaAngle1[1])) * cPwmMult) / cPwmDiv + cPFConst);
-
-  // rr_coxa_msg.data =  tickToRad((((-CoxaAngle1[0]))  * cPwmMult) / cPwmDiv + cPFConst);
-  // rr_femur_msg.data = tickToRad((((-FemurAngle1[0])) * cPwmMult) / cPwmDiv + cPFConst);
-  // rr_tibia_msg.data = tickToRad((((-TibiaAngle1[0])) * cPwmMult) / cPwmDiv + cPFConst);
 }
 
 void Legs::publish()

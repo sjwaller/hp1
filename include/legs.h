@@ -45,7 +45,6 @@ private:
     std_msgs::Float64 lf_coxa_msg, lf_tibia_msg, lf_femur_msg;
 
     int radToServo(float rads);
-
 	double tickToRad(int tick);
 };
 

@@ -111,8 +111,6 @@ void Hp1::inputCallback(const hp1::input::ConstPtr& msg)
 
 if(true) 
 {
-  bool fAdjustLegPositions = false;
-
   // In an analog mode so should be OK...
   g_sPS2ErrorCnt = 0;    // clear out error count...
 
@@ -121,17 +119,14 @@ if(true)
   {
     if (::g_InControlState.fHexOn) 
     {
-      turnRobotOff();
-
+        turnRobotOff();
         ROS_INFO_STREAM("Hp1 Off"); 
     }
     else
     {
       //Turn on
       ::g_InControlState.fHexOn = 1;
-      fAdjustLegPositions = true;
-
-        ROS_INFO_STREAM("Hp1 On");
+      ROS_INFO_STREAM("Hp1 On");
     }
   }
 
@@ -220,14 +215,12 @@ if(true)
       {
         g_BodyYOffset = 35;
       }
-      fAdjustLegPositions = true;
     }
 
     if (msg->buttons[PSB_PAD_UP]) // D-Up - Button Test
     {
       g_BodyYOffset += 10;
-      // And see if the legs should adjust...
-      fAdjustLegPositions = true;
+
       if (g_BodyYOffset > MAX_BODY_Y)
       {
         g_BodyYOffset = MAX_BODY_Y;
@@ -244,8 +237,6 @@ if(true)
       {
         g_BodyYOffset = 0;      // constrain don't go less than zero.
       }
-      // And see if the legs should adjust...
-      fAdjustLegPositions = true;
     }
 
     if (msg->buttons[PSB_PAD_RIGHT])  // D-Right - Button Test
@@ -379,17 +370,9 @@ if(true)
 
     //Calculate g_InControlState.BodyPos.y
     ::g_InControlState.BodyPos.y = min(max(g_BodyYOffset + g_BodyYShift,  0), MAX_BODY_Y);
-    
-    if (fAdjustLegPositions)
-    {
-    //  AdjustLegPositionsToBodyHeight();    // Put main workings into main program file
-    }
   }
 }
 
-//==============================================================================
-// PS2TurnRobotOff - code used couple of places so save a little room...
-//==============================================================================
 void Hp1::turnRobotOff(void)
 {
   //Turn off
@@ -402,25 +385,11 @@ void Hp1::turnRobotOff(void)
   ::g_InControlState.TravelLength.x = 0;
   ::g_InControlState.TravelLength.z = 0;
   ::g_InControlState.TravelLength.y = 0;
-  // g_BodyYOffset = 0;
-  // g_BodyYShift = 0;
+  // ::g_BodyYOffset = 0;
+  // ::g_BodyYShift = 0;
   ::g_InControlState.SelectedLeg = 255;
   ::g_InControlState.fHexOn = 0;
-  // AdjustLegPositionsToBodyHeight();    // Put main workings into main program file
 }
-
-// /* Convert radians to servo position offset. */
-// int Hp1::radToServo( float rads)
-// {
-//    float val = (rads*100)/51 * 100;
-//   return (int) val;
-// }
-
-// /* Convert servo position offset to radians*/
-// double Hp1::tickToRad(int tick)
-// {
-//   return ((double)tick-512) * 0.0051;
-// }
 
 Hp1::~Hp1()
 {
