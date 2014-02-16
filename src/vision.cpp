@@ -126,6 +126,8 @@ void Vision::camShift(Mat inImg)
       // Try and detect a face and start tracking
       if(trackObject == 0)
       {
+          // http://mymobilerobots.com/myblog/academic/tutorial-opencv-2-4-3-face-tracking-detection-using-vs-2010-c/
+
           //convert captured image to gray scale and equalize
           cvtColor(image, gsf, CV_BGR2GRAY);
           equalizeHist(gsf, gsf);
@@ -148,13 +150,12 @@ void Vision::camShift(Mat inImg)
           }
       }
 
-      //Convert the colour space to HSV
-      cvtColor(image, hsv, CV_BGR2HSV);
-
       // If the destination coordinates have been received, then start the tracking
-      // trackObject is set when the destination coordinates have been received
       if( trackObject != 0)
       {
+          //Convert the colour space to HSV
+          cvtColor(image, hsv, CV_BGR2HSV);
+
           int _vmin = vmin, _vmax = vmax;
 
           inRange(hsv, Scalar(0, smin, MIN(_vmin,_vmax)),
@@ -196,7 +197,8 @@ void Vision::camShift(Mat inImg)
               ROS_INFO("*********DESTINATION LOST in CAMSHIFT************");
               ROS_INFO("track height %d width %d", trackWindow.height, trackWindow.width);
               
-              trackObject = 0; //Disable tracking to avoid termination of node due to negative heights TBD
+              trackObject = 0; // Disable tracking to avoid termination of node due to negative heights TBD
+              
               int cols = backproj.cols, rows = backproj.rows, r = (MIN(cols, rows) + 5)/6;
               trackWindow = Rect(trackWindow.x - r, trackWindow.y - r,
                                  trackWindow.x + r, trackWindow.y + r) &
