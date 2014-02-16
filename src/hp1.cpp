@@ -5,8 +5,6 @@
 #include <phoenix.h>
 #include <hp1.h>
 
-// const  DEG2RAD = 0.01745;
-
 using namespace std;
 
 int main(int argc, char** argv)

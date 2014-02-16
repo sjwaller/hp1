@@ -32,9 +32,8 @@
 
 
 #define NUM_GAITS    6
-#define SmDiv    4  //"Smooth division" factor for the smooth control function, a value of 3 to 5 is most suitable
+
 extern void GaitSelect(void);
-extern short SmoothControl (short CtrlMoveInp, short CtrlMoveOut, char CtrlDivider);
 
 extern long           CoxaAngle1[6];    //Actual Angle of the horizontal hip, decimals = 1
 extern long           FemurAngle1[6];   //Actual Angle of the vertical hip, decimals = 1
@@ -86,11 +85,6 @@ typedef struct _InControlState {
 // Define global class objects
 //-----------------------------------------------------------------------------
 extern INCONTROLSTATE   g_InControlState;        // State information that controller changes
-
-//-----------------------------------------------------------------------------
-// Define Global variables
-//-----------------------------------------------------------------------------
-extern bool          g_fEnableServos;      // Hack to allow me to turn servo processing off...
 
 #endif
 

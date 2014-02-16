@@ -50,48 +50,52 @@
 
 //--------------------------------------------------------------------
 //[MIN/MAX ANGLES] - Start off assume same as Phoenix...#define cRRCoxaMin1    -700    //Mechanical limits of the Right Rear Leg, decimals = 1
+#define cXXCoxaMin1    -700
+#define cXXCoxaMax1    700
+#define cXXFemurMin1    -900
+#define cXXFemurMax1    900
 #define cXXTibiaMin1    -700
 #define cXXTibiaMax1    900
 
-#define cRRCoxaMin1    -700
-#define cRRCoxaMax1    700
-#define cRRFemurMin1    -900
-#define cRRFemurMax1    900
+#define cRRCoxaMin1     cXXCoxaMin1
+#define cRRCoxaMax1    cXXCoxaMax1
+#define cRRFemurMin1    cXXFemurMin1
+#define cRRFemurMax1    cXXFemurMax1
 #define cRRTibiaMin1    cXXTibiaMin1
 #define cRRTibiaMax1    cXXTibiaMax1
 
-#define cRMCoxaMin1    -700    //Mechanical limits of the Right Middle Leg, decimals = 1
-#define cRMCoxaMax1     700
-#define cRMFemurMin1     -900
-#define cRMFemurMax1     900
+#define cRMCoxaMin1    cXXCoxaMin1    //Mechanical limits of the Right Middle Leg, decimals = 1
+#define cRMCoxaMax1     cXXCoxaMax1
+#define cRMFemurMin1     cXXFemurMin1
+#define cRMFemurMax1     cXXFemurMax1
 #define cRMTibiaMin1    cXXTibiaMin1
 #define cRMTibiaMax1     cXXTibiaMax1
 
-#define cRFCoxaMin1    -700    //Mechanical limits of the Right Front Leg, decimals = 1
-#define cRFCoxaMax1     700
-#define cRFFemurMin1    -900
-#define cRFFemurMax1    900
+#define cRFCoxaMin1     cXXCoxaMin1    //Mechanical limits of the Right Front Leg, decimals = 1
+#define cRFCoxaMax1     cXXCoxaMax1
+#define cRFFemurMin1    cXXFemurMin1
+#define cRFFemurMax1    cXXFemurMax1
 #define cRFTibiaMin1    cXXTibiaMin1
 #define cRFTibiaMax1    cXXTibiaMax1
 
-#define cLRCoxaMin1    -700    //Mechanical limits of the Left Rear Leg, decimals = 1
-#define cLRCoxaMax1     700
-#define cLRFemurMin1     -900
-#define cLRFemurMax1     900
+#define cLRCoxaMin1     cXXCoxaMin1    //Mechanical limits of the Left Rear Leg, decimals = 1
+#define cLRCoxaMax1     cXXCoxaMax1
+#define cLRFemurMin1     cXXFemurMin1
+#define cLRFemurMax1     cXXFemurMax1
 #define cLRTibiaMin1    cXXTibiaMin1
 #define cLRTibiaMax1     cXXTibiaMax1
 
-#define cLMCoxaMin1    -700    //Mechanical limits of the Left Middle Leg, decimals = 1
-#define cLMCoxaMax1     700
-#define cLMFemurMin1     -900
-#define cLMFemurMax1     900
+#define cLMCoxaMin1     cXXCoxaMin1    //Mechanical limits of the Left Middle Leg, decimals = 1
+#define cLMCoxaMax1     cXXCoxaMax1
+#define cLMFemurMin1     cXXFemurMin1
+#define cLMFemurMax1     cXXFemurMax1
 #define cLMTibiaMin1    cXXTibiaMin1
 #define cLMTibiaMax1     cXXTibiaMax1
 
-#define cLFCoxaMin1     -700    //Mechanical limits of the Left Front Leg, decimals = 1
-#define cLFCoxaMax1     700
-#define cLFFemurMin1     -900
-#define cLFFemurMax1     900
+#define cLFCoxaMin1      cXXCoxaMin1   //Mechanical limits of the Left Front Leg, decimals = 1
+#define cLFCoxaMax1     cXXCoxaMax1
+#define cLFFemurMin1     cXXFemurMin1
+#define cLFFemurMax1     cXXFemurMax1
 #define cLFTibiaMin1    cXXTibiaMin1
 #define cLFTibiaMax1     cXXTibiaMax1
 

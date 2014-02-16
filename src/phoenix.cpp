@@ -17,8 +17,6 @@
 #include <unistd.h>
 #include <phoenix.h>
 
-bool g_fEnableServos = true;
-
 //Build tables for Leg configuration like I/O and MIN/imax values to easy access values using a FOR loop
 //Constants are still defined as single values in the cfg file to make it easy to read/configure
 
@@ -113,7 +111,7 @@ bool         IKSolutionError;    //Output true if the solution is NOT possible
 //[TIMING]
 unsigned long   lTimerStart;    //Start time of the calculation cycles
 unsigned long   lTimerEnd;        //End time of the calculation cycles
-int            CycleTime;        //Total Cycle time
+int             CycleTime;        //Total Cycle time
 
 short            ServoMoveTime;        //Time for servo updates
 short            PrevServoMoveTime;    //Previous time for the servo updates
@@ -347,10 +345,6 @@ void loop()
       } 
       while (millis() < lTimeWaitEnd);
     }
-
-    // Only do commit if we are actually doing something...
- //   g_ServoDriver.CommitServoDriver(ServoMoveTime);
-
   } 
   else 
   {
@@ -358,14 +352,8 @@ void loop()
     if (g_InControlState.fPrev_HexOn || (AllDown= 0)) 
     {
       ServoMoveTime = 600;
- //     g_ServoDriver.CommitServoDriver(ServoMoveTime);
       usleep(60000);
     } 
-    else 
-    {
- //     g_ServoDriver.FreeServos();
- //     Eyes = 0;
-    }
 
     usleep(2000);  // give a pause between times we call if nothing is happening
   }
@@ -643,7 +631,6 @@ void Gait (int GaitCurrentLegNr)
     GaitRotY[GaitCurrentLegNr] = GaitRotY[GaitCurrentLegNr] - (g_InControlState.TravelLength.y/TLDivFactor);
 
   }
-
 
   //Advance to the next step
   if (LastLeg)  {  //The last leg in this step
@@ -975,19 +962,4 @@ void CheckAngles(void)
     FemurAngle1[LegIndex] = std::min(std::max(FemurAngle1[LegIndex], (long)cFemurMin1[LegIndex]), (long)cFemurMax1[LegIndex]);
     TibiaAngle1[LegIndex] = std::min(std::max(TibiaAngle1[LegIndex], (long)cTibiaMin1[LegIndex]), (long)cTibiaMax1[LegIndex]);
   }
-}
-
-//--------------------------------------------------------------------
-// SmoothControl (From Zenta) -  This function makes the body 
-//            rotation and translation much smoother 
-//--------------------------------------------------------------------
-short SmoothControl (short CtrlMoveInp, short CtrlMoveOut, int CtrlDivider)
-{
-
-  if (CtrlMoveOut < (CtrlMoveInp - 4))
-    return CtrlMoveOut + abs((CtrlMoveOut - CtrlMoveInp)/CtrlDivider);
-  else if (CtrlMoveOut > (CtrlMoveInp + 4))
-    return CtrlMoveOut - abs((CtrlMoveOut - CtrlMoveInp)/CtrlDivider);
-
-  return CtrlMoveInp;
 }
